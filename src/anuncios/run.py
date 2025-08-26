@@ -1,17 +1,17 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 anuncios = []
 @app.route("/")
 def index():
-    return f"En home hay {len(anuncios)} anuncios"
+    return render_template("index.html", num_ads=len(anuncios))
 
 @app.route("/ad/<string:slug>/")
 def show_ad(slug):
-    return f"Mostrando el anuncio {slug}"
+    return render_template("ad_view.html", slug_title=slug)
 
 @app.route("/admin/ad/")
 @app.route("/admin/ad/<int:ad_id>/")
-def post_form(ad_id=None):
-    return f"ad_form {ad_id}"
+def ad_form(ad_id=None):
+    return render_template("admin/ad_form.html", ad_id=ad_id)
