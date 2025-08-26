@@ -10,3 +10,8 @@ def index():
 @app.route("/ad/<string:slug>/")
 def show_ad(slug):
     return f"Mostrando el anuncio {slug}"
+
+@app.route("/admin/ad/")
+@app.route("/admin/ad/<int:ad_id>/")
+def post_form(ad_id=None):
+    return f"ad_form {ad_id}"
