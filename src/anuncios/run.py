@@ -2,6 +2,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
-@app.route('/')
-def test():
-    return "init flask"
+anuncios = []
+@app.route("/")
+def index():
+    return f"En home hay {len(anuncios)} anuncios"
