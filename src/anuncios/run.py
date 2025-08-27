@@ -16,7 +16,7 @@ def show_ad(slug):
 def ad_form(ad_id=None):
     return render_template("admin/ad_form.html", ad_id=ad_id)
 
-@app.route("/signup/" methods=["GET", "POST"])
+@app.route("/signup/", methods=["GET", "POST"])
 def show_signup_form():
     if request.method == 'POST':
         name = request.form['name']
