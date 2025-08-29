@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if ad_id %}
+            Modificando el anuncio {{ ad_id }}
+        {% else %}
+            Nuevo anuncio
+        {% endif %}
+    </title>
+</head>
+<body>
+{% if ad_id %}
+    Modificando el anuncio {{ ad_id }}
+{% else %}
+    Nuevo anuncio
+{% endif %}
+</body>
+</html>
