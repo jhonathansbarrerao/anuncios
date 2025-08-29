@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from forms import SignupForm
+from forms import SignupForm, PostForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'unaclave'
@@ -14,10 +14,18 @@ def index():
 def show_post(slug):
     return render_template("ad_view.html", slug_title=slug)
 
-@app.route("/admin/ad/")
-@app.route("/admin/ad/<int:ad_id>/")
+@app.route("/admin/ad/", methods=['GET', 'POST'], defaults={'ad_id': None})
+@app.route("/admin/ad/<int:ad_id>/", methods=['GET', 'POST'])
 def ad_form(ad_id=None):
-    return render_template("admin/ad_form.html", ad_id=ad_id)
+    form = PostForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        title_slug = form.title_slug.data
+        content = form.content.data
+        ad = {'title': title, 'title_slug': title_slug, 'content': content}
+        ads.append(ad)
+        return redirect(url_for('index'))
+    return render_template("admin/ad_form.html", form=form)
 
 @app.route("/signup/", methods=["GET", "POST"])
 def show_signup_form():
