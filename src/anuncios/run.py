@@ -16,3 +16,7 @@ def show_post(slug):
 @app.route("/admin/ad/<int:ad_id>/")
 def ad_form(ad_id=None):
     return render_template("admin/ad_form.html", ad_id=ad_id)
+
+@app.route("/signup/")
+def show_signup_form():
+    return render_template("admin/signup_form.html")
