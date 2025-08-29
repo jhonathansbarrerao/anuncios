@@ -8,7 +8,7 @@ ads = []
 
 @app.route("/")
 def index():
-    return render_template("index.html", num_ads=len(ads))
+    return render_template("index.html", ads=ads)
 
 @app.route("/ad/<string:slug>/")
 def show_post(slug):

@@ -1,5 +1,9 @@
 {% extends "base_template.html" %}
 {% block title %}Anuncios{% endblock %}
 {% block content %}
-    {{ num_ads }} ads
+    <ul>
+    {% for ad in ads %}
+        <li>{{ ad.title }}</li>
+    {% endfor %}
+    </ul>
 {% endblock %}
