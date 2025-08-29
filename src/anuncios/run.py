@@ -2,6 +2,8 @@ from flask import Flask
 
 app = Flask(__name__)
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+ads = []
+
+@app.route("/")
+def index():
+    return f"{len(ads)} ads"
