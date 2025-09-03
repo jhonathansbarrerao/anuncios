@@ -1,11 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for("static", filename="base_style.css") }}">
+  <meta charset="UTF-8">
+  <title>{% block title %}Eventos{% endblock %}</title>
 </head>
 <body>
-{% block content %}{% endblock %}
+  <nav>
+    <a href="{{ url_for('inicio') }}">Inicio</a> |
+    <a href="{{ url_for('crear_evento') }}">Crear evento</a> |
+    Categorías:
+    {% for c in categorias %}<a href="{{ url_for('eventos_por_categoria', categoria=c) }}">{{ c }}</a>{% if not loop.last %} | {% endif %}{% endfor %}
+  </nav>
+  <hr>
+  {% with mensajes = get_flashed_messages(with_categories=true) %}
+    {% if mensajes %}
+      <ul>
+        {% for cat, msg in mensajes %}
+          <li><strong>{{ cat|upper }}:</strong> {{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
 </body>
 </html>
