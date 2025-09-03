@@ -1,0 +1,26 @@
+{% extends "base_template.html" %}
+{% block title %}Eventos: {{ categoria }}{% endblock %}
+{% block content %}
+<h2>Eventos de {{ categoria }}</h2>
+<p>
+  Categorías:
+  {% for c in categorias %}
+    <a href="{{ url_for('eventos_por_categoria', categoria=c) }}">{{ c }}</a>{% if not loop.last %} | {% endif %}
+  {% endfor %}
+  | <a href="{{ url_for('inicio') }}">Todos</a>
+</p>
+
+{% if eventos %}
+  <ul>
+  {% for e in eventos %}
+    <li>
+      {% if e.destacado %}{% endif %}
+      <a href="{{ url_for('detalle_evento', slug=e.slug) }}">{{ e.titulo }}</a>
+      — {{ e.fecha }} {{ e.hora }} — {{ e.lugar }}
+    </li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <p>No hay eventos en esta categoría.</p>
+{% endif %}
+{% endblock %}
