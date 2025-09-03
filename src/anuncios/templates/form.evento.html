@@ -1,0 +1,21 @@
+{% extends "base_template.html" %}
+{% block title %}Nuevo evento{% endblock %}
+{% block content %}
+<h2>Crear evento</h2>
+<form method="POST">
+  {{ form.hidden_tag() }}
+
+  <p>{{ form.titulo.label }}<br>{{ form.titulo(size=50) }}</p>
+  <p>{{ form.slug.label }} (opcional)<br>{{ form.slug(size=50) }}</p>
+  <p>{{ form.descripcion.label }}<br>{{ form.descripcion(rows=5, cols=60) }}</p>
+  <p>{{ form.fecha.label }}<br>{{ form.fecha(type="date") }}</p>
+  <p>{{ form.hora.label }}<br>{{ form.hora(type="time") }}</p>
+  <p>{{ form.lugar.label }}<br>{{ form.lugar(size=50) }}</p>
+  <p>{{ form.categoria.label }}<br>{{ form.categoria() }}</p>
+  <p>{{ form.cupo_maximo.label }}<br>{{ form.cupo_maximo() }}</p>
+  <p>{{ form.destacado() }} {{ form.destacado.label }}</p>
+
+  <p>{{ form.enviar() }}</p>
+</form>
+<p><a href="{{ url_for('inicio') }}">← Volver</a></p>
+{% endblock %}
