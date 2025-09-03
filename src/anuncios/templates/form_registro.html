@@ -1,0 +1,12 @@
+{% extends "base_template.html" %}
+{% block title %}Registro al evento{% endblock %}
+{% block content %}
+<h2>Registro: {{ evento.titulo }}</h2>
+<form method="POST">
+  {{ form.hidden_tag() }}
+  <p>{{ form.nombre.label }}<br>{{ form.nombre(size=40) }}{% for e in form.nombre.errors %}<br><span style="color:red">{{ e }}</span>{% endfor %}</p>
+  <p>{{ form.correo.label }}<br>{{ form.correo(size=40) }}{% for e in form.correo.errors %}<br><span style="color:red">{{ e }}</span>{% endfor %}</p>
+  <p>{{ form.enviar() }}</p>
+</form>
+<p><a href="{{ url_for('detalle_evento', slug=evento.slug) }}">← Volver</a></p>
+{% endblock %}
