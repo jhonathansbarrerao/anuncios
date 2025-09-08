@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager
 from forms import SignupForm, PostForm
+from models import  users
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ba2e18ce248bab7ce9425333f0420b57a5f07dfef342e1876d3013a524acf416f813af3071a65e3860475fe8e81c3a42c3c8fa65051de39aa2037fa695b305a7bc7044a415eb'
@@ -41,3 +42,10 @@ def show_signup_form():
             return redirect(next)
         return redirect(url_for('index'))
     return render_template("admin/signup_form.html", form=form)
+
+@login_manager.user_loader
+def load_user(user_id):
+    for user in users:
+        if user.id == int(user_id):
+            return user
+    return None
