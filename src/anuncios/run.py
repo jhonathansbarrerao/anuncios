@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask_login import LoginManager
 from forms import SignupForm, PostForm
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'unaclave'
+app.config['SECRET_KEY'] = 'ba2e18ce248bab7ce9425333f0420b57a5f07dfef342e1876d3013a524acf416f813af3071a65e3860475fe8e81c3a42c3c8fa65051de39aa2037fa695b305a7bc7044a415eb'
+login_manager = LoginManager(app)
 
 ads = []
 
