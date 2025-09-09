@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager, current_user, login_user, logout_user
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from forms import SignupForm, PostForm, LoginForm
 from urllib.parse import urlparse
 from models import users, get_user, User
@@ -42,6 +42,7 @@ def show_post(slug):
 
 @app.route("/admin/ad/", methods=['GET', 'POST'], defaults={'ad_id': None})
 @app.route("/admin/ad/<int:ad_id>/", methods=['GET', 'POST'])
+@login_required
 def ad_form(ad_id=None):
     form = PostForm()
     if form.validate_on_submit():
