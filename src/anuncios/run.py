@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager, current_user, login_user
+from flask_login import LoginManager, current_user, login_user, logout_user
 from forms import SignupForm, PostForm, LoginForm
 from urllib.parse import urlparse
 from models import users, get_user, User
@@ -24,6 +24,12 @@ def login():
                 next_page = url_for('index')
             return redirect(next_page)
     return render_template('login_form.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 @app.route("/")
