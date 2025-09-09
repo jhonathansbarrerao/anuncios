@@ -1,13 +1,29 @@
 from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager
-from forms import SignupForm, PostForm
-from models import  users
+from flask_login import LoginManager, current_user, login_user
+from forms import SignupForm, PostForm, LoginForm
+from urllib.parse import urlparse
+from models import users, get_user, User
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ba2e18ce248bab7ce9425333f0420b57a5f07dfef342e1876d3013a524acf416f813af3071a65e3860475fe8e81c3a42c3c8fa65051de39aa2037fa695b305a7bc7044a415eb'
 login_manager = LoginManager(app)
 
 ads = []
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = get_user(form.email.data)
+        if user is not None and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            next_page = request.args.get('next')
+            if not next_page or urlparse(next_page).netloc != '':
+                next_page = url_for('index')
+            return redirect(next_page)
+    return render_template('login_form.html', form=form)
 
 @app.route("/")
 def index():
