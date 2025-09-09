@@ -25,6 +25,7 @@ def login():
             return redirect(next_page)
     return render_template('login_form.html', form=form)
 
+
 @app.route("/")
 def index():
     return render_template("index.html", ads=ads)
@@ -48,16 +49,24 @@ def ad_form(ad_id=None):
 
 @app.route("/signup/", methods=["GET", "POST"])
 def show_signup_form():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = SignupForm()
     if form.validate_on_submit():
         name = form.name.data
         email = form.email.data
         password = form.password.data
-        next = request.args.get('next', None)
-        if next:
-            return redirect(next)
-        return redirect(url_for('index'))
+        # Creamos el usuario y lo guardamos
+        user = User(len(users) + 1, name, email, password)
+        users.append(user)
+        # Dejamos al usuario logueado
+        login_user(user, remember=True)
+        next_page = request.args.get('next', None)
+        if not next_page or urlparse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
     return render_template("admin/signup_form.html", form=form)
+
 
 @login_manager.user_loader
 def load_user(user_id):
