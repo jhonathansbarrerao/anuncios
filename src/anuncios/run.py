@@ -22,7 +22,7 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = get_user(form.email.data)
+        user = User.get_by_email(form.email.data)
         if user is not None and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             next_page = request.args.get('next')
@@ -65,25 +65,27 @@ def show_signup_form():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = SignupForm()
+    error = None
     if form.validate_on_submit():
         name = form.name.data
         email = form.email.data
         password = form.password.data
-        # Creamos el usuario y lo guardamos
-        user = User(len(users) + 1, name, email, password)
-        users.append(user)
-        # Dejamos al usuario logueado
-        login_user(user, remember=True)
-        next_page = request.args.get('next', None)
-        if not next_page or urlparse(next_page).netloc != '':
-            next_page = url_for('index')
-        return redirect(next_page)
-    return render_template("admin/signup_form.html", form=form)
+        user = User.get_by_email(email)
+        if user is not None:
+            error = f'El email {email} ya está registrado'
+        else:
+            user = User(name=name, email=email)
+            user.set_password(password)
+            user.save()
+            # usuario logueado
+            login_user(user, remember=True)
+            next_page = request.args.get('next', None)
+            if not next_page or urlparse(next_page).netloc != '':
+                next_page = url_for('index')
+            return redirect(next_page)
+    return render_template("admin/signup_form.html", form=form, error=error)
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    for user in users:
-        if user.id == int(user_id):
-            return user
-    return None
+    return User.get_by_id(int(user_id))
