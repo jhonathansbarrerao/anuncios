@@ -21,8 +21,11 @@ email-validator==2.3.0
 flask==3.1.2
     # via anuncios
     # via flask-login
+    # via flask-sqlalchemy
     # via flask-wtf
 flask-login==0.6.3
+    # via anuncios
+flask-sqlalchemy==3.1.1
     # via anuncios
 flask-wtf==1.2.2
     # via anuncios
@@ -38,6 +41,13 @@ markupsafe==3.0.2
     # via jinja2
     # via werkzeug
     # via wtforms
+psycopg==3.2.10
+    # via anuncios
+sqlalchemy==2.0.43
+    # via flask-sqlalchemy
+typing-extensions==4.15.0
+    # via psycopg
+    # via sqlalchemy
 werkzeug==3.1.3
     # via flask
     # via flask-login
