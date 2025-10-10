@@ -1,10 +1,13 @@
+from flask import url_for
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from slugify import slugify
+from sqlalchemy.exc import IntegrityError
 from run import db
 
 class User(db.Model, UserMixin):
 
-    __tablename__ = 'anuncio_user'
+    __tablename__ = 'ad_user'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
@@ -33,3 +36,34 @@ class User(db.Model, UserMixin):
     @staticmethod
     def get_by_email(email):
         return User.query.filter_by(email=email).first()
+
+class Ad(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('ad_user.id', ondelete='CASCADE'), nullable=False)
+    title = db.Column(db.String(256), nullable=False)
+    title_slug = db.Column(db.String(256), unique=True, nullable=False)
+    content = db.Column(db.Text)
+    def __repr__(self):
+        return f'<Ad {self.title}>'
+    def save(self):
+        if not self.id:
+            db.session.add(self)
+        if not self.title_slug:
+            self.title_slug = slugify(self.title)
+        saved = False
+        count = 0
+        while not saved:
+            try:
+                db.session.commit()
+                saved = True
+            except IntegrityError:
+                count += 1
+                self.title_slug = f'{slugify(self.title)}-{count}'
+    def public_url(self):
+        return url_for('show_ad', slug=self.title_slug)
+    @staticmethod
+    def get_by_slug(slug):
+        return Ad.query.filter_by(title_slug=slug).first()
+    @staticmethod
+    def get_all():
+        return Ad.query.all()
