@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, abort
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
-from forms import SignupForm, PostForm, LoginForm
+from forms import SignupForm, AdForm, LoginForm
 from urllib.parse import urlparse
 
 ads = []
@@ -52,13 +52,12 @@ def show_ad(slug):
 @app.route("/admin/ad/<int:ad_id>/", methods=['GET', 'POST'])
 @login_required
 def ad_form(ad_id=None):
-    form = PostForm()
+    form = AdForm()
     if form.validate_on_submit():
         title = form.title.data
-        title_slug = form.title_slug.data
         content = form.content.data
-        ad = {'title': title, 'title_slug': title_slug, 'content': content}
-        ads.append(ad)
+        ad = Ad(user_id=current_user.id, title=title, content=content)
+        ad.save()
         return redirect(url_for('index'))
     return render_template("admin/ad_form.html", form=form)
 
