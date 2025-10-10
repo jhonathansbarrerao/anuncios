@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, abort
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from forms import SignupForm, PostForm, LoginForm
 from urllib.parse import urlparse
 
+ads = []
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ba2e18ce248bab7ce9425333f0420b57a5f07dfef342e1876d3013a524acf416f813af3071a65e3860475fe8e81c3a42c3c8fa65051de39aa2037fa695b305a7bc7044a415eb'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg://jhbarrera:class2025@localhost:5432/anuncios'
@@ -41,8 +42,11 @@ def index():
     return render_template("index.html", ads=ads)
 
 @app.route("/ad/<string:slug>/")
-def show_post(slug):
-    return render_template("ad_view.html", slug_title=slug)
+def show_ad(slug):
+    ad = Ad.get_by_slug(slug)
+    if ad is None:
+        abort(404)
+    return render_template("ad_view.html", ad=ad)
 
 @app.route("/admin/ad/", methods=['GET', 'POST'], defaults={'ad_id': None})
 @app.route("/admin/ad/<int:ad_id>/", methods=['GET', 'POST'])
