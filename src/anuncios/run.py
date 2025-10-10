@@ -3,7 +3,6 @@ from flask_login import LoginManager, current_user, login_user, logout_user, log
 from flask_sqlalchemy import SQLAlchemy
 from forms import SignupForm, PostForm, LoginForm
 from urllib.parse import urlparse
-from models import users, get_user, User
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ba2e18ce248bab7ce9425333f0420b57a5f07dfef342e1876d3013a524acf416f813af3071a65e3860475fe8e81c3a42c3c8fa65051de39aa2037fa695b305a7bc7044a415eb'
@@ -13,6 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 db = SQLAlchemy(app)
+from models import User
 
 ads = []
 
