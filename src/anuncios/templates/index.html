@@ -3,7 +3,7 @@
 {% block content %}
     <ul>
     {% for ad in ads %}
-        <li>{{ ad.title }}</li>
+        <li><a href="{{ ad.public_url() }}">{{ ad.title }}</a></li>
     {% endfor %}
     </ul>
 {% endblock %}

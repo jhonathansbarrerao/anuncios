@@ -12,9 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 db = SQLAlchemy(app)
-from models import User
-
-ads = []
+from models import User, Ad
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -37,9 +35,9 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-
 @app.route("/")
 def index():
+    ads = Ad.get_all()
     return render_template("index.html", ads=ads)
 
 @app.route("/ad/<string:slug>/")
